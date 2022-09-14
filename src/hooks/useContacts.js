@@ -1,0 +1,37 @@
+import {
+  useAddContactsMutation,
+  useGetContactsQuery,
+  useRemoveContactsMutation,
+  useUpdateContactByIdMutation,
+} from 'redux/slice/contactSlice';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+export const useContacts = () => {
+  const { data: contacts, isLoading, isFetching } = useGetContactsQuery();
+  const [removeContact, { isLoading: isRemoving }] =
+    useRemoveContactsMutation();
+  const [addContact] = useAddContactsMutation();
+  const [updateContact] = useUpdateContactByIdMutation();
+
+  const handleRemoveContact = async id => {
+    try {
+      const res = await removeContact(id);
+      if (res.error) {
+        throw new Error();
+      }
+      Notify.success(`Contact successfully removed`);
+    } catch (error) {
+      Notify.failure(`Something went wrong`);
+    }
+  };
+
+  return {
+    contacts,
+    isLoading,
+    isFetching,
+    addContact,
+    updateContact,
+    handleRemoveContact,
+    isRemoving,
+  };
+};

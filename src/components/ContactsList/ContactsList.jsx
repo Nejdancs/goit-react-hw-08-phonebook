@@ -1,0 +1,34 @@
+import React from 'react';
+import { ContactItem } from 'components';
+import { Empty, List, Title, Wrapper } from './ContactsList.styled';
+import { Skeleton } from '@mui/material';
+import { useFilteredContacts } from 'hooks/useFilteredContacts';
+
+const ContactsList = () => {
+  const { filteredContacts, isLoading } = useFilteredContacts();
+
+  return (
+    <Wrapper>
+      <Title>Contacts</Title>
+      {isLoading && (
+        <List>
+          {Array.from(new Array(10)).map((_, index) => (
+            <li key={index}>
+              <Skeleton variant="rectangular" width={'100%'} height={88} />
+            </li>
+          ))}
+        </List>
+      )}
+      {filteredContacts?.length === 0 && <Empty>Contact list is empty</Empty>}
+      {filteredContacts?.length > 0 && (
+        <List>
+          {filteredContacts.map(({ id, name, number }) => (
+            <ContactItem key={id} id={id} name={name} number={number} />
+          ))}
+        </List>
+      )}
+    </Wrapper>
+  );
+};
+
+export default ContactsList;
