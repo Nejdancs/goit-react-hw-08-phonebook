@@ -20,7 +20,7 @@ import authOperations from '../../redux/auth/auth-operations';
 
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -33,10 +33,13 @@ const RegistrationForm = () => {
     onSubmit: async (values, { resetForm }) => {
       setIsLoading(true);
       const res = await dispatch(authOperations.register(values));
-
       setIsLoading(false);
-      if (res.error) {
-        setIsError(true);
+
+      if (res.error && res.payload === '400') {
+        setErrorMessage('An account with this email already exists');
+        return;
+      } else if (res.error) {
+        setErrorMessage('Something went wrong, try again');
         return;
       }
       resetForm();
@@ -46,9 +49,9 @@ const RegistrationForm = () => {
   return (
     <StyledForm autoComplete="off" onSubmit={formik.handleSubmit}>
       <p>Sign up with your name, email and a password.</p>
-      {isError && (
+      {errorMessage && (
         <Alert variant="outlined" severity="error">
-          An account with this email already exists
+          {errorMessage}
         </Alert>
       )}
       <InputWrapper

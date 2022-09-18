@@ -20,7 +20,7 @@ export const App = () => {
   const isFetchingCurrentUser = useSelector(
     state => state.auth.isFetchingCurrentUser
   );
-  console.log('app isFetchingCurrentUser', isFetchingCurrentUser);
+
   useEffect(() => {
     dispatch(authOperations.fetchCurrentUser());
   }, [dispatch]);

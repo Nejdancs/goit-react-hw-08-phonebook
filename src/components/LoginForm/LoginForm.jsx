@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -29,8 +29,11 @@ const LoginForm = () => {
       setIsLoading(true);
       const res = await dispatch(authOperations.logIn(values));
       setIsLoading(false);
-      if (res.error) {
-        setIsError(true);
+      if (res.error && res.payload === '400') {
+        setErrorMessage('No user found for this email/password');
+        return;
+      } else if (res.error) {
+        setErrorMessage('Something went wrong, try again');
         return;
       }
       resetForm();
@@ -40,9 +43,9 @@ const LoginForm = () => {
   return (
     <StyledForm autoComplete="off" onSubmit={formik.handleSubmit}>
       <p>Enter your email address and password.</p>
-      {isError && (
+      {errorMessage && (
         <Alert variant="outlined" severity="error">
-          No user found for this email/password
+          {errorMessage}
         </Alert>
       )}
 

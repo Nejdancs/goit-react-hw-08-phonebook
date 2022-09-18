@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
-axios.defaults.baseURL = 'https://connections-api.herokuapp.com/';
+import * as API from '../../helpers/api/api';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const token = {
   set(token) {
@@ -13,32 +13,36 @@ const token = {
   },
 };
 
-const register = createAsyncThunk('auth/register', async credentials => {
+const register = createAsyncThunk(
+  'auth/register',
+  async (credentials, thunkAPI) => {
+    try {
+      const data = await API.signUp(credentials);
+      token.set(data.token);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+const logIn = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
-    const { data } = await axios.post('/users/signup', credentials);
+    const data = await API.logIn(credentials);
     token.set(data.token);
     return data;
   } catch (error) {
-    throw new Error();
+    return thunkAPI.rejectWithValue(error.message);
   }
 });
 
-const logIn = createAsyncThunk('auth/login', async credentials => {
+const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
-    const { data } = await axios.post('/users/login', credentials);
-    token.set(data.token);
-    return data;
-  } catch (error) {
-    throw new Error();
-  }
-});
-
-const logOut = createAsyncThunk('auth/logout', async () => {
-  try {
-    await axios.post('/users/logout');
+    await API.logOut();
     token.unSet();
   } catch (error) {
-    throw new Error();
+    Notify.failure('Something went wrong, try again');
+    return thunkAPI.rejectWithValue(error.message);
   }
 });
 
@@ -55,10 +59,10 @@ const fetchCurrentUser = createAsyncThunk(
     token.set(persistedToken);
 
     try {
-      const { data } = await axios.get('/users/current');
+      const data = await API.fetchCurrentUser();
       return data;
     } catch (error) {
-      throw new Error();
+      return thunkAPI.rejectWithValue();
     }
   }
 );

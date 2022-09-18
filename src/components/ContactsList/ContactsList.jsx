@@ -1,15 +1,21 @@
 import React from 'react';
 import { ContactItem } from 'components';
 import { Empty, List, Title, Wrapper } from './ContactsList.styled';
-import { Skeleton } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 import { useFilteredContacts } from 'hooks/useFilteredContacts';
+import { useFilter } from 'hooks/useFilter';
 
 const ContactsList = () => {
   const { filteredContacts, isLoading } = useFilteredContacts();
+  const { filter } = useFilter();
 
   return (
     <Wrapper>
       <Title>Contacts</Title>
+      {filter && (
+        <Typography mb={2}>Found: {filteredContacts.length}</Typography>
+      )}
+
       {isLoading && (
         <List>
           {Array.from(new Array(10)).map((_, index) => (

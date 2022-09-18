@@ -9,9 +9,7 @@ export const useFilteredContacts = () => {
   const filteredContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
     return contacts?.filter(contact =>
-      !normalizedFilter
-        ? true
-        : contact.name.toLowerCase().match(`^${normalizedFilter}`)
+      contact.name.toLowerCase().includes(normalizedFilter)
     );
   }, [filter, contacts]);
 
