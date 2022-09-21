@@ -21,15 +21,26 @@ const ContactItem = ({ id, name, number }) => {
       return name;
     }
 
-    const preSelect = name.slice(0, name.indexOf(filter));
-    const postSelect = name.slice(name.indexOf(filter) + filter.length);
-    const select = filter;
+    const normalizedName = name.toLowerCase();
+    const normalizedFilter = filter.toLowerCase();
+
+    const preHighlighted = name.slice(
+      0,
+      normalizedName.indexOf(normalizedFilter)
+    );
+    const postHighlighted = name.slice(
+      normalizedName.indexOf(normalizedFilter) + normalizedFilter.length
+    );
+    const highlighted = name.slice(
+      name.indexOf(normalizedFilter),
+      name.indexOf(normalizedFilter) + normalizedFilter.length
+    );
 
     return (
       <span>
-        {preSelect}
-        <SelectedText>{select}</SelectedText>
-        {postSelect}
+        {preHighlighted}
+        <SelectedText>{highlighted}</SelectedText>
+        {postHighlighted}
       </span>
     );
   };
