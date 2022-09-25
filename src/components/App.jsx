@@ -42,7 +42,10 @@ export const App = () => {
               >
                 <Route index element={<Filter />} />
                 <Route path="add" element={<ContactsForm type={'add'} />} />
-                <Route path="edit" element={<ContactsForm type={'update'} />} />
+                <Route
+                  path=":id/edit"
+                  element={<ContactsForm type={'update'} />}
+                />
               </Route>
 
               <Route

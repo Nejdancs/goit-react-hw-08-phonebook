@@ -33,7 +33,3 @@ export const Contact = styled.p`
     font-size: 16px;
   }
 `;
-
-export const SelectedText = styled.span`
-  color: #1976d2;
-`;

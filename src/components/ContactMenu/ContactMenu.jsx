@@ -3,14 +3,11 @@ import PropTypes from 'prop-types';
 import { Box, IconButton, Link, MenuItem, Menu } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Link as RouterLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setContactId } from 'redux/slice/contactIdSlice';
 import Confirm from 'components/Confirm/Confirm';
 import Loader from 'components/Loader/Loader';
 import { useContacts } from 'hooks/useContacts';
 
 const ContactMenu = ({ number, id }) => {
-  const dispatch = useDispatch();
   const { handleRemoveContact, isRemoving } = useContacts();
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -20,11 +17,6 @@ const ContactMenu = ({ number, id }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleSetContactId = id => {
-    dispatch(setContactId(id));
-    handleClose();
   };
 
   return (
@@ -65,8 +57,8 @@ const ContactMenu = ({ number, id }) => {
             <li>
               <MenuItem
                 component={RouterLink}
-                to="/contacts/edit"
-                onClick={() => handleSetContactId(id)}
+                to={`/contacts/${id}/edit`}
+                onClick={handleClose}
               >
                 Edit
               </MenuItem>

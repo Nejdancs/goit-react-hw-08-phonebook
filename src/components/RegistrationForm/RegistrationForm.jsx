@@ -35,7 +35,7 @@ const RegistrationForm = () => {
       const res = await dispatch(authOperations.register(values));
       setIsLoading(false);
 
-      if (res.error && res.payload === '400') {
+      if (res.error && res.payload === 400) {
         setErrorMessage('An account with this email already exists');
         return;
       } else if (res.error) {

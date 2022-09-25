@@ -21,7 +21,8 @@ const register = createAsyncThunk(
       token.set(data.token);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      const {response: {status}} = error
+      return thunkAPI.rejectWithValue(status);
     }
   }
 );
@@ -32,7 +33,8 @@ const logIn = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
     token.set(data.token);
     return data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+    const {response: {status}} = error
+    return thunkAPI.rejectWithValue(status);
   }
 });
 
@@ -42,7 +44,8 @@ const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     token.unSet();
   } catch (error) {
     Notify.failure('Something went wrong, try again');
-    return thunkAPI.rejectWithValue(error.message);
+    const {response: {status}} = error
+      return thunkAPI.rejectWithValue(status);
   }
 });
 

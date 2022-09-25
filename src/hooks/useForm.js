@@ -1,20 +1,20 @@
-import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { validationSchemaContact } from 'helpers/validation/schemas';
 import { useContacts } from './useContacts';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const useForm = type => {
-  const contactId = useSelector(state => state.contactId.value);
-  const { contacts, addContact, updateContact } = useContacts();
+  const { id: contactId } = useParams();
+  const { contacts = [], addContact, updateContact, isLoading } = useContacts();
   const contact = contacts.find(el => el.id === contactId);
   const navigate = useNavigate();
 
   const getData = () => {
-    if (type === 'add') {
+    if (type === 'add' || !contact) {
       return { name: '', number: '' };
     }
+
     return { name: contact.name, number: contact.number };
   };
 
@@ -79,5 +79,5 @@ export const useForm = type => {
       Notify.failure(`Something went wrong`);
     }
   };
-  return { formik };
+  return { formik, isLoading, contact };
 };

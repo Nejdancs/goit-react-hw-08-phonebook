@@ -29,7 +29,7 @@ const LoginForm = () => {
       setIsLoading(true);
       const res = await dispatch(authOperations.logIn(values));
       setIsLoading(false);
-      if (res.error && res.payload === '400') {
+      if (res.error && res.payload === 400) {
         setErrorMessage('No user found for this email/password');
         return;
       } else if (res.error) {
