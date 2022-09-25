@@ -24,12 +24,18 @@ function stringToColor(string) {
 
 function stringAvatar(name) {
   return {
-    bgcolor: stringToColor(name),
+    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
   };
 }
 
 export default function BasicAvatar({ name, sx = {}, ...props }) {
-  return <Avatar sx={{ ...sx, ...stringAvatar(name) }} {...props} />;
+  return (
+    <Avatar
+      sx={{ ...sx, bgcolor: stringToColor(name) }}
+      {...stringAvatar(name)}
+      {...props}
+    />
+  );
 }
 
 BasicAvatar.propTypes = {
