@@ -23,8 +23,12 @@ function stringToColor(string) {
 }
 
 function stringAvatar(name) {
+  const nameSplit = name.split(' ');
   return {
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    children:
+      nameSplit.length > 1
+        ? `${nameSplit[0][0]}${nameSplit[1][0]}`
+        : `${nameSplit[0][0]}`,
   };
 }
 

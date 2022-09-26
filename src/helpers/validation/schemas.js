@@ -29,11 +29,7 @@ export const validationSchemaLogin = yup.object().shape({
 });
 
 export const validationSchemaContact = yup.object().shape({
-  name: yup
-    .string()
-    .min(3)
-    .matches(regExp.name, 'Name is not valid')
-    .required(),
+  name: yup.string().min(3).required(),
   number: yup
     .string()
     .matches(regExp.number, 'Phone number is not valid')
